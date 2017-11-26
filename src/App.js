@@ -1,0 +1,129 @@
+import React, { Component } from 'react';
+import { DateTime } from 'luxon';
+import './App.css';
+import './css/weather-icons-wind.min.css';
+import './css/weather-icons.min.css';
+import './font/weathericons-regular-webfont.eot';
+import './font/weathericons-regular-webfont.svg';
+import './font/weathericons-regular-webfont.ttf';
+import './font/weathericons-regular-webfont.woff';
+import './font/weathericons-regular-webfont.woff2';
+
+class Momentum extends Component {
+  constructor() {
+    super();
+
+    var time = this.getTime();
+
+    this.state = {
+      time,
+      name: "Ying Hang",
+      salutation: this.determineSalutation(time.hour),
+      quote: null,
+      geolocation: {
+        latitude: null,
+        longitude: null
+      },
+      location: null,
+      temperature: null,
+      weatherAPIKey: "594d083c4f45203a1d8cf6c1f7dd0a0b",
+      weatherIcon: null
+    };
+  }
+
+  componentWillMount() {
+    navigator.geolocation.getCurrentPosition(position =>
+    this.setState({
+      geolocation: {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      }
+    },
+    () => this.updateWeather()),
+    () => {throw "Error occured!"});
+  }
+
+  componentDidMount() {
+    fetch('https://horizonshq.herokuapp.com/api/inspirationalquotes')
+      .then(resp => resp.json())
+      .then(resp => this.setState({quote: resp.message}));
+
+    setInterval(() => {
+      var time = DateTime.local();
+      this.setState({
+        time,
+        salutation: this.determineSalutation(time.hour)
+      });
+    }, 1000 * 1)
+  }
+
+  determineSalutation(hour) {
+    if (hour > 12 && hour < 19) {
+     return "afternoon";
+    } else if (hour > 18) {
+     return "evening";
+    } else {
+     return "morning";
+    }
+  }
+
+  determineWeatherCondition(str) {
+    switch (str) {
+      case 'Rain':
+        return 'wi-day-rain';
+      case 'Thunderstorm':
+        return 'wi-day-thunderstorm';
+      case 'Drizzle':
+        return 'wi-day-showers';
+      case 'Extreme':
+        return 'wi-day-snow-thunderstorm';
+      case 'Snow':
+        return 'wi-day-snow';
+      case 'Clouds':
+        return 'wi-day-cloudy';
+      case 'Clear':
+        return 'wi-day-sunny';
+      default:
+        return null
+    }
+  }
+
+  updateWeather() {
+    fetch(`http://api.openweathermap.org/data/2.5/weather?APPID=${this.state.weatherAPIKey}&lat=${this.state.geolocation.latitude}&lon=${this.state.geolocation.longitude}`)
+      .then(resp => resp.json())
+      .then(resp => this.setState({
+        location: resp.name,
+        temperature: Math.round(resp.main.temp - 273.15),
+        weatherIcon: this.determineWeatherCondition(resp.weather[0].main)
+      }));
+  }
+
+  getTime() {
+    return DateTime.local();
+  }
+
+  render() {
+    return (
+      <div className="bg-wrapper">
+        <div className ="text-right top-right weather">
+          <div><i className={`wi ${this.state.weatherIcon}`}></i>&nbsp;<span id="weather"></span>{this.state.temperature}&#8451;</div>
+          <h5 id="location">{this.state.location}</h5>
+        </div>
+        <div className ="text-center centered">
+            <div className="block-text">
+              <h1 id="time">{this.state.time.toFormat("h':'mm")}</h1>
+              <h2 id="ampm">{this.state.time.toFormat("a")}</h2>
+            </div>
+            <h3 id="greetings">
+              Good {this.state.salutation}, {this.state.name}
+            </h3>
+        </div>
+        <div className ="text-center bottom-third quote">
+            <div id="quote-text">{this.state.quote}</div>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default Momentum;
