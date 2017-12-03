@@ -1,13 +1,6 @@
 import React, { Component } from 'react';
 import { DateTime } from 'luxon';
 import './App.css';
-import './css/weather-icons-wind.min.css';
-import './css/weather-icons.min.css';
-import './font/weathericons-regular-webfont.eot';
-import './font/weathericons-regular-webfont.svg';
-import './font/weathericons-regular-webfont.ttf';
-import './font/weathericons-regular-webfont.woff';
-import './font/weathericons-regular-webfont.woff2';
 
 class Momentum extends Component {
   constructor() {
