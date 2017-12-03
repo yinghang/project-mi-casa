@@ -1,2 +1,3 @@
-# momentum-extension-react
-Momentum Browser Extension ported to React
+Mi Casa Browser Extension
+
+Personalized homepage extension for browsers written in React.
