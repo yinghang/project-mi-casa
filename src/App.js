@@ -95,7 +95,7 @@ class Momentum extends Component {
   }
 
   determineSalutation(hour) {
-    if (hour > 12 && hour < 19) {
+    if (hour > 11 && hour < 19) {
       return 'afternoon';
     } else if (hour > 18) {
       return 'evening';
