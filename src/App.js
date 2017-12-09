@@ -16,7 +16,7 @@ const customStyles = {
   }
 };
 
-class Momentum extends Component {
+class MiCasa extends Component {
   constructor() {
     super();
 
@@ -189,10 +189,15 @@ class Momentum extends Component {
           <div className="text-center bottom-third quote">
             <div id="quote-text">{this.state.quote}</div>
           </div>
+          <div className="text-right bottom-right">
+            <div id="settings-text">
+              <h6><i class="fa fa-cog"></i>Settings</h6>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 }
 
-export default Momentum;
+export default MiCasa;
