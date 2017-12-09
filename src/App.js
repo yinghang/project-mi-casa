@@ -147,38 +147,48 @@ class Momentum extends Component {
     return DateTime.local();
   }
 
+  getBGStyle(category = 'HK') {
+    return {
+      backgroundImage: `url(https://source.unsplash.com/2560x1600/daily?${category})`,
+      backgroundSize: 'cover',
+      height: '100vh'
+    }
+  }
+
   render() {
     return (
-      <div className="bg-wrapper">
-        <div className="text-right top-right weather">
-          <div>
-            <i className={`wi ${this.state.weatherIcon}`} />&nbsp;<span id="weather" />
-            {this.state.temperature}&#8451;
+      <div style={this.getBGStyle(this.state.category)}>
+        <div className="bg-wrapper">
+          <div className="text-right top-right weather">
+            <div>
+              <i className={`wi ${this.state.weatherIcon}`} />&nbsp;<span id="weather" />
+              {this.state.temperature}&#8451;
+            </div>
+            <h5 id="location">{this.state.location}</h5>
           </div>
-          <h5 id="location">{this.state.location}</h5>
-        </div>
-        <div className="text-center centered">
-          <div className="block-text">
-            <h1 id="time">{this.state.time.toFormat("h':'mm")}</h1>
-            <h2 id="ampm">{this.state.time.toFormat('a')}</h2>
+          <div className="text-center centered">
+            <div className="block-text">
+              <h1 id="time">{this.state.time.toFormat("h':'mm")}</h1>
+              <h2 id="ampm">{this.state.time.toFormat('a')}</h2>
+            </div>
+            <h3 id="greetings">
+              Good {this.state.salutation}, {this.state.name}
+            </h3>
+            <Modal
+              isOpen={this.state.modalIsOpen}
+              style={customStyles}
+              contentLabel="name-modal"
+            >
+              <div>What's your name?</div>
+                <input name="name" type="text" onChange={this.handleChange}/>
+                <button onClick={this.closeModal}>
+                  Next
+                </button>
+            </Modal>
           </div>
-          <h3 id="greetings">
-            Good {this.state.salutation}, {this.state.name}
-          </h3>
-          <Modal
-            isOpen={this.state.modalIsOpen}
-            style={customStyles}
-            contentLabel="name-modal"
-          >
-            <div>What's your name?</div>
-              <input name="name" type="text" onChange={this.handleChange}/>
-              <button onClick={this.closeModal}>
-                Next
-              </button>
-          </Modal>
-        </div>
-        <div className="text-center bottom-third quote">
-          <div id="quote-text">{this.state.quote}</div>
+          <div className="text-center bottom-third quote">
+            <div id="quote-text">{this.state.quote}</div>
+          </div>
         </div>
       </div>
     );
